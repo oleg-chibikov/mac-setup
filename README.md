@@ -124,8 +124,19 @@ The script copies [mcp-config.json](./mcp-config.json) to
 `~/.copilot/mcp-config.json` when the file is missing. It wires the Atlassian
 and GitHub MCP servers.
 
+## Claude Code memory
+
+[claude/MEMORY.md](./claude/MEMORY.md) holds notes Claude Code reads in every
+project:
+
+- **pnpm version** comes from `packageManager`, pinned per repo through mise.
+- **`GH_PAGER=cat`** keeps `gh` from opening a pager and hanging the agent.
+- **Review asks** load the `review` skill from agent-skills first.
+
+The script copies the file to `~/.claude/MEMORY.md` when missing and imports
+it at the top of `~/.claude/CLAUDE.md`. The writing-style import in the same
+file comes from the agent-skills installer.
+
 ## Not scripted
 
-- **`~/.claude`** holds `CLAUDE.md`, `MEMORY.md` and the sleep hooks. Copy by
-  hand, it carries personal notes.
 - **Secrets** go into 1Password, no dotfile keeps them.

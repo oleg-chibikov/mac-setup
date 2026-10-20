@@ -103,6 +103,18 @@ for ext in \
 	code --install-extension "$ext" >/dev/null
 done
 
+# --- Claude Code memory ------------------------------------------------------
+claude_dir="$HOME/.claude"
+mkdir -p "$claude_dir"
+if [ ! -f "$claude_dir/MEMORY.md" ]; then
+	say "Copying Claude memory"
+	cp "$script_dir/claude/MEMORY.md" "$claude_dir/MEMORY.md"
+fi
+touch "$claude_dir/CLAUDE.md"
+if ! grep -qxF '@~/.claude/MEMORY.md' "$claude_dir/CLAUDE.md"; then
+	printf '@~/.claude/MEMORY.md\n\n%s\n' "$(cat "$claude_dir/CLAUDE.md")" >"$claude_dir/CLAUDE.md"
+fi
+
 # --- MCP servers -------------------------------------------------------------
 if [ ! -f "$HOME/.copilot/mcp-config.json" ]; then
 	say "Copying MCP config"
