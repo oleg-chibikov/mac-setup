@@ -93,6 +93,20 @@ gh extension install github/gh-stack
 
 [gh-stack](https://github.com/github/gh-stack) manages stacked PRs.
 
+## Teamwork Graph CLI
+
+`twg` reads and writes Jira and Confluence from the terminal and from agents.
+Source: [teamwork-graph.atlassian.com](https://teamwork-graph.atlassian.com).
+
+```sh
+bash <(curl -fsSL https://teamwork-graph.atlassian.com/cli/install)
+```
+
+The installer puts `twg` in `~/.local/bin`, asks you to accept Atlassian's
+terms and log in. It also adds the `com.atlassian.twg.upkeep` LaunchAgent,
+which runs `twg upkeep` every 12 minutes to keep the CLI updated. Skip npm: the
+package there is too old to run.
+
 ## VS Code extensions
 
 - [anthropic.claude-code](https://marketplace.visualstudio.com/items?itemName=anthropic.claude-code)

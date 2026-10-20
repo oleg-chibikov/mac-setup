@@ -81,6 +81,14 @@ if ! gh extension list 2>/dev/null | grep -q gh-stack; then
 	gh extension install github/gh-stack
 fi
 
+# --- Teamwork Graph CLI ------------------------------------------------------
+# The installer asks to accept Atlassian's terms and to log in, then adds the
+# upkeep LaunchAgent that keeps twg updated.
+if [ ! -x "$HOME/.local/bin/twg" ]; then
+	say "Installing twg"
+	bash <(curl -fsSL https://teamwork-graph.atlassian.com/cli/install)
+fi
+
 # --- VS Code extensions ------------------------------------------------------
 say "Installing VS Code extensions"
 for ext in \
