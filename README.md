@@ -1,0 +1,117 @@
+# mac-setup
+
+The tools and customizations I put on a Mac myself, with one script that
+installs them all. IT-managed software stays out.
+
+```sh
+git clone https://github.com/oleg-chibikov/mac-setup.git
+./mac-setup/install.sh
+```
+
+The script is idempotent: run it again and it skips what is already there.
+
+## Homebrew
+
+Source: [brew.sh](https://brew.sh). The script installs Homebrew itself when
+missing.
+
+| Formula | Why |
+| --- | --- |
+| [git](https://formulae.brew.sh/formula/git) | newer than the Apple one |
+| [gh](https://formulae.brew.sh/formula/gh) | GitHub CLI |
+| [mise](https://formulae.brew.sh/formula/mise) | node, pnpm and yarn versions per project |
+| [fzf](https://formulae.brew.sh/formula/fzf) | the branch picker in `git sb` |
+| [jq](https://formulae.brew.sh/formula/jq) | git-aliases and gh-review-notify parse JSON with it |
+| [shellcheck](https://formulae.brew.sh/formula/shellcheck) | `lint.sh` in git-aliases runs it |
+| [shfmt](https://formulae.brew.sh/formula/shfmt) | same `lint.sh` formats with it |
+| [terminal-notifier](https://formulae.brew.sh/formula/terminal-notifier) | gh-review-notify pops macOS notifications through it |
+| [mkcert](https://formulae.brew.sh/formula/mkcert) | local HTTPS certificates |
+| [agent-browser](https://agent-browser.dev/) | browser automation for coding agents |
+
+| Cask | Why |
+| --- | --- |
+| [visual-studio-code](https://formulae.brew.sh/cask/visual-studio-code) | editor |
+| [docker-desktop](https://formulae.brew.sh/cask/docker-desktop) | containers |
+| [maccy](https://formulae.brew.sh/cask/maccy) | clipboard history |
+| [claude](https://formulae.brew.sh/cask/claude) | Claude desktop app |
+| [android-platform-tools](https://formulae.brew.sh/cask/android-platform-tools) | adb for mobile testing |
+
+## Node toolchain
+
+[mise](https://mise.jdx.dev) pins the versions globally:
+
+```sh
+mise use -g node@22 pnpm@latest yarn@1
+```
+
+On top, one npm global:
+[`@github/copilot`](https://www.npmjs.com/package/@github/copilot), the Copilot
+CLI.
+
+## Git
+
+Global config the script sets:
+
+```sh
+git config --global color.ui true
+git config --global push.autosetupremote true
+```
+
+`user.name` and `user.email` are prompted on first run, so the script carries
+no personal data.
+
+Aliases come from
+[oleg-chibikov/git-aliases](https://github.com/oleg-chibikov/git-aliases). Its
+own `install.sh` wires the `include.path` and offers to source `git-sb.zsh`.
+That wrapper is separate from the aliases on purpose: `git sb` can land on a
+branch in another worktree, and only a shell function can `cd` the parent
+shell there.
+
+## Shell
+
+- **Oh My Zsh** from [ohmyz.sh](https://ohmyz.sh), default `robbyrussell`
+  theme, `git` plugin.
+- **`~/.local/bin` on PATH** for the self-written CLIs.
+- **`mise activate zsh`** in `.zshrc`.
+
+## My repos
+
+Cloned into `~/Documents/Dev`, each installed by its own `install.sh`:
+
+| Repo | What it gives |
+| --- | --- |
+| [git-aliases](https://github.com/oleg-chibikov/git-aliases) | short git commands: `git sb`, `git db`, `git m` and the rest |
+| [agent-skills](https://github.com/oleg-chibikov/agent-skills) | Copilot skills: writing-style, review, create-pr, implement-ticket, address-comments |
+| [gh-review-notify](https://github.com/oleg-chibikov/gh-review-notify) | macOS notification for every new PR review comment, runs as a LaunchAgent |
+
+## GitHub CLI
+
+```sh
+gh auth login
+gh extension install github/gh-stack
+```
+
+[gh-stack](https://github.com/github/gh-stack) manages stacked PRs.
+
+## VS Code extensions
+
+- [anthropic.claude-code](https://marketplace.visualstudio.com/items?itemName=anthropic.claude-code)
+- [dbaeumer.vscode-eslint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+- [esbenp.prettier-vscode](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+- [formulahendry.auto-rename-tag](https://marketplace.visualstudio.com/items?itemName=formulahendry.auto-rename-tag)
+- [huizhou.githd](https://marketplace.visualstudio.com/items?itemName=huizhou.githd)
+- [nrwl.angular-console](https://marketplace.visualstudio.com/items?itemName=nrwl.angular-console)
+- [oleg-chibikov.open-in-remote-repo](https://marketplace.visualstudio.com/items?itemName=oleg-chibikov.open-in-remote-repo)
+- [orta.vscode-jest](https://marketplace.visualstudio.com/items?itemName=orta.vscode-jest)
+
+## MCP servers
+
+The script copies [mcp-config.json](./mcp-config.json) to
+`~/.copilot/mcp-config.json` when the file is missing. It wires the Atlassian
+and GitHub MCP servers.
+
+## Not scripted
+
+- **`~/.claude`** holds `CLAUDE.md`, `MEMORY.md` and the sleep hooks. Copy by
+  hand, it carries personal notes.
+- **Secrets** go into 1Password, no dotfile keeps them.
